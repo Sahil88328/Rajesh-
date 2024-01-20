@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #calculator {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            height: 40px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="calculator">
+        <input type="date" id="dob" placeholder="Select your date of birth">
+        <button onclick="calculateAge()">Calculate Age</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function calculateAge() {
+            const dobInput = document.getElementById('dob');
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = ''; // Clear previous results
+
+            const dob = new Date(dobInput.value);
+            const today = new Date();
+
+            if (isNaN(dob.getTime())) {
+                alert('Please select a valid date of birth.');
+                return;
+            }
+
+            const ageInMilliseconds = today - dob;
+            const ageInSeconds = ageInMilliseconds / 1000;
+            const ageInMinutes = ageInSeconds / 60;
+            const ageInHours = ageInMinutes / 60;
+            const ageInDays = ageInHours / 24;
+            const ageInYears = ageInDays / 365.25;
+
+            const ageResult = document.createElement('p');
+            ageResult.innerHTML = `Your age is approximately:<br>
+                                  Years: ${ageInYears.toFixed(2)}<br>
+                                  Days: ${ageInDays.toFixed(2)}<br>
+                                  Hours: ${ageInHours.toFixed(2)}<br>
+                                  Minutes: ${ageInMinutes.toFixed(2)}<br>
+                                  Seconds: ${ageInSeconds.toFixed(2)}`;
+
+            resultDiv.appendChild(ageResult);
+        }
+    </script>
+
+</body>
+</html>

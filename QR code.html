@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        #generator {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            height: 40px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        #qrcode {
+            margin-top: 20px;
+        }
+
+        #downloadBtn {
+            display: none;
+            margin-top: 20px;
+            background-color: #61dafb;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="generator">
+        <select id="qrType">
+            <option value="url">URL</option>
+            <option value="text">Text</option>
+            <option value="mail">Mail</option>
+            <option value="sms">SMS</option>
+            <!-- Add more options as needed -->
+        </select>
+
+        <input type="text" id="inputValue" placeholder="Enter value">
+
+        <button onclick="generateQR()">Generate QR Code</button>
+
+        <div id="qrcode"></div>
+
+        <a id="downloadBtn" download="qrcode.png">
+            <button>Download QR Code</button>
+        </a>
+    </div>
+
+    <script>
+        function generateQR() {
+            const qrType = document.getElementById('qrType').value;
+            const inputValue = document.getElementById('inputValue').value;
+            const qrcodeDiv = document.getElementById('qrcode');
+            const downloadBtn = document.getElementById('downloadBtn');
+
+            qrcodeDiv.innerHTML = ''; // Clear previous QR code
+            downloadBtn.style.display = 'none'; // Hide download button
+
+            const qrcode = new QRCode(qrcodeDiv, {
+                text: generateQRCodeText(qrType, inputValue),
+                width: 150,
+                height: 150,
+            });
+
+            // Show download button after QR code generation
+            downloadBtn.style.display = 'block';
+        }
+
+        function generateQRCodeText(type, value) {
+            switch (type) {
+                case 'url':
+                    return value.startsWith('http') ? value : `http://${value}`;
+                case 'mail':
+                    return `mailto:${value}`;
+                case 'sms':
+                    return `sms:${value}`;
+                default:
+                    return value;
+            }
+        }
+
+        // Update download link with the QR code image data
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const qrCodeImage = document.querySelector('#qrcode img');
+            this.href = qrCodeImage.src;
+        });
+    </script>
+
+</body>
+</html>
